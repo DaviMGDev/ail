@@ -7,7 +7,8 @@ Project conventions for this repository.
 Documentation set for **ACE 6.7** (Attempto Controlled English) and its fork
 **AIL** (Agent Instruction Language), a strict superset of ACE adding
 sequences and procedures. No code, no tooling — the documents are the
-artifact. The authoritative content lives in `specs/`.
+artifact. The authoritative content lives in `specs/`; `skills/ail/` is a
+derived artifact that applies the AIL spec to writing instruction texts.
 
 ## Repository layout
 
@@ -16,6 +17,10 @@ artifact. The authoritative content lives in `specs/`.
   AIL extension reference), `index.md` (registry), `log.md` (activity log).
 - `discussions/` — design discussion snapshots; read them for design
   rationale (esp. before changing AIL content).
+- `skills/ail/` — Agent Skill for writing AIL texts: `SKILL.md` plus
+  references (grammar, constructs, worked example, assumptions), written in
+  valid AIL. AIL content never names the language ("AIL", "ACE") — the
+  frontmatter carries the `tags: [ail]` marker instead.
 - `.pi/plans/` — plan state; commit it like any other project doc.
 - `.pi-subagents/` — transient agent run artifacts; **never commit**
   (ignored via `.gitignore`).
@@ -46,7 +51,7 @@ artifact. The authoritative content lives in `specs/`.
 
   - `type`: `docs` (spec/doc changes), `chore` (housekeeping, repo setup),
     `feat`/`fix` (reserved for future code, none today).
-  - `scope`: `specs`, `project`, or a file name when it fits.
+  - `scope`: `specs`, `skills`, `project`, or a file name when it fits.
   - `summary`: imperative mood, lowercase, ≤ 72 chars, no trailing period.
   - Add a body (what + why) when the summary alone is not enough; reference
     `discussions/` snapshots for design rationale.
