@@ -39,7 +39,7 @@ derived artifact that applies the AIL spec to writing instruction texts.
 
 ## Git workflow
 
-- Work directly on `master` (local, single-user project).
+- Work directly on `main` (local, single-user project).
 - Commit **atomically**: one logical change per commit; stage explicitly
   (`git add <paths>`), then review with `git status` / `git diff --cached`.
 - **Never** stage `.pi-subagents/` or anything ignored.
