@@ -1,28 +1,14 @@
 ---
 type: spec
 title: "ACE / AIL — Specification"
-description: "Spec monolith for the ACE language documentation set and its fork AIL (Agent Instruction Language): context, scope, and pointers into LANGUAGE.md and ail.md"
+description: "Spec monolith for the ACE language documentation set and its fork AIL (Agent Instruction Language): context, users, conformance, and decisions; the language content lives in the citizen files LANGUAGE.md and ail.md"
 tags: [spec, controlled-natural-language, ace, ail]
 created: "2026-08-08"
 updated: "2026-08-08"
+sections: [context, users, conformance, decisions]
 ---
 
 # ACE / AIL — Specification
-
-## Must contain
-
-- Context: problem statement, goals, stakeholders
-- Users: personas or user groups
-- User Stories: at least one story per persona, each with EARS acceptance criteria
-- Architecture: data models, auth, key flows
-- Decisions: choices with trade-offs recorded (or "none yet")
-- Stack: languages/frameworks, dependencies, testing tiers
-- Ops: infrastructure, deployment, NFRs, security
-- API: contract in natural language + code blocks (or linked file)
-- `index.md` registry lists every file in `specs/`
-- All `[placeholders]` replaced with concrete content
-
----
 
 ## Context
 
@@ -36,38 +22,24 @@ Design context: the full decision record for AIL is captured in `discussions/spe
 
 - Knowledge engineers and ontologists writing OWL/SWRL content via ACE
 - Specifiers who want formal, unambiguous requirements without learning logic notation
-- Anyone reading or writing ACE texts (queries, rules, domain descriptions)
+- Readers and writers of ACE texts (queries, rules, domain descriptions)
 - Authors of AIL texts: people describing agent behaviour as sequences/procedures (knowledge section + control section)
 
-## User Stories
+## Conformance
 
-Story: [US-001] — Read and write valid ACE
+The conformance contract of this specification set has two levels:
 
-As a knowledge engineer,
-I want a precise reference of ACE construction and interpretation rules,
-so that I can write texts that parse unambiguously with the APE parser.
-
-Acceptance criteria (EARS — 5 patterns in the spec-md skill, `references/ears-quickref.md`):
-
-- The language reference SHALL document noun phrases, verb phrases, and sentence forms with valid examples.
-- The language reference SHALL document the golden rules (determiner requirement, tense restriction, hyphenation, punctuation).
-
-Story: [US-002] — Write AIL procedures
-
-As an author of AIL texts,
-I want a precise reference of the AIL extension constructs,
-so that I can write sequences and procedures that describe agent behaviour unambiguously.
+- **ACE base** — conformance is defined by the official ACE 6.7 Construction Rules (attempto.ifi.uzh.ch), the authoritative external contract; [LANGUAGE.md](LANGUAGE.md) is the in-repo reference that documents what makes a text valid ACE.
+- **AIL extension** — conformance is the superset guarantee: every valid ACE text SHALL also be a valid AIL text; AIL SHALL clarify readings where ACE is underspecified, but SHALL never reject syntax that ACE accepts. The compatibility annex in [ail.md](ail.md) → Compatibility verifies this per construct.
 
 Acceptance criteria (EARS):
 
+- The ACE base reference SHALL document noun phrases, verb phrases, and sentence forms with valid examples.
+- The ACE base reference SHALL document the golden rules (determiner requirement, tense restriction, hyphenation, punctuation).
 - The AIL reference SHALL define control contexts (main sequence, procedure bodies) and their ordering semantics.
 - The AIL reference SHALL define the world model (objects, facts, closed-world condition evaluation).
-- The AIL reference SHALL define the extension constructs: implicit-addressee commands, `Otherwise`, `For every`, `While`, `Procedure`/calls, `Stop!` — with examples.
+- The AIL reference SHALL define the extension constructs — implicit-addressee commands, `Otherwise`, `For every`, `While`, `Procedure`/calls, `Stop!` — with examples.
 - The AIL reference SHALL state the superset guarantee: every valid ACE text is a valid AIL text, and AIL clarifies semantics but never rejects ACE syntax.
-
-## Architecture
-
-Not applicable — this `specs/` documents languages, not a system. Internal structure: SPEC.md (this monolith) → [LANGUAGE.md](LANGUAGE.md) (ACE 6.7 base reference) → [ail.md](ail.md) (AIL extension reference) → index.md (registry) → log.md (activity log).
 
 ## Decisions
 
@@ -77,15 +49,4 @@ Not applicable — this `specs/` documents languages, not a system. Internal str
 - The AIL extension lives in its own citizen file, ail.md, rather than inside LANGUAGE.md — one concern per file: the base language vs. the extension. (2026-08-08)
 - AIL is a design exercise: no parser, compiler, or executor is planned; the specification itself is the language definition, so internal consistency is the quality bar. (2026-08-08)
 - The AIL extension set is deliberately minimal: order (the only new semantic rule), an explicit world model, implicit-addressee commands, `Otherwise`, `For every`, `While`, `Procedure`/calls, and `Stop!`. Full rationale in the design snapshots. (2026-08-08)
-
-## Stack
-
-Not applicable — the documented subject is natural-language grammars, not software. The reference implementation of the ACE base is the Attempto Parsing Engine (APE); see LANGUAGE.md → Tools. AIL has no implementation by design.
-
-## Ops
-
-Not applicable — no infrastructure or deployment for a documentation-only directory.
-
-## API
-
-The "API" of this documentation set is the two languages themselves: the ACE base and the AIL extension. Their contracts are described in natural language with examples in [LANGUAGE.md](LANGUAGE.md) and [ail.md](ail.md); the authoritative external contract for the ACE base is the official ACE 6.7 Construction Rules (attempto.ifi.uzh.ch). AIL adds the superset guarantee: AIL clarifies readings of the base where ACE is underspecified, but never rejects syntax that ACE accepts (see ail.md → Compatibility).
+- SPEC.md follows the v4 spec-md contract — the frontmatter `sections:` list is the contract and the body matches it exactly: enforced-only template sections (architecture, stack, ops, api) were dropped rather than declared "not applicable", and the user-stories + api content was reworked into conformance. (2026-08-08)

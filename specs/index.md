@@ -14,7 +14,7 @@ Project status: draft
 
 | File | Title | Description |
 |------|-------|-------------|
-| [SPEC.md](SPEC.md) | ACE / AIL — Specification | spec monolith: context, users, stories, decisions; light by design |
+| [SPEC.md](SPEC.md) | ACE / AIL — Specification | spec monolith: context, users, conformance, decisions; light by design |
 | [LANGUAGE.md](LANGUAGE.md) | ACE 6.7 — Syntax and Practical Reference | the ACE base: golden rules, noun/verb phrases, sentences, queries, commands, semantics, cheat sheet |
 | [ail.md](ail.md) | AIL (Agent Instruction Language) — Extension Reference | the AIL fork: superset guarantee, world model, control contexts, steps, `Otherwise`, `For every`, `While`, procedures, `Stop!`, failure semantics, compatibility annex |
 | [log.md](log.md) | specs/ log | activity log of spec changes |
