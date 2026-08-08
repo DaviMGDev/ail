@@ -5,17 +5,17 @@ Project conventions for this repository.
 ## What this repository is
 
 Documentation set for **ACE 6.7** (Attempto Controlled English) and its fork
-**ACL** (Agent Controlled Language), a strict superset of ACE adding
+**AIL** (Agent Instruction Language), a strict superset of ACE adding
 sequences and procedures. No code, no tooling — the documents are the
 artifact. The authoritative content lives in `specs/`.
 
 ## Repository layout
 
 - `specs/` — MKF compound node: `SPEC.md` (the spec monolith, the only
-  contract), citizen files (`LANGUAGE.md` = ACE base reference, `acl.md` =
-  ACL extension reference), `index.md` (registry), `log.md` (activity log).
+  contract), citizen files (`LANGUAGE.md` = ACE base reference, `ail.md` =
+  AIL extension reference), `index.md` (registry), `log.md` (activity log).
 - `discussions/` — design discussion snapshots; read them for design
-  rationale (esp. before changing ACL content).
+  rationale (esp. before changing AIL content).
 - `.pi/plans/` — plan state; commit it like any other project doc.
 - `.pi-subagents/` — transient agent run artifacts; **never commit**
   (ignored via `.gitignore`).
@@ -29,7 +29,7 @@ artifact. The authoritative content lives in `specs/`.
 - Every change to `specs/` is logged in `log.md` (date + change + reason).
 - `index.md` lists every file in `specs/`; internal relative links must
   resolve.
-- ACL is a strict superset of ACE: the ACL docs may clarify semantics but
+- AIL is a strict superset of ACE: the AIL docs may clarify semantics but
   must never reject syntax that ACE accepts.
 
 ## Git workflow
@@ -53,5 +53,5 @@ artifact. The authoritative content lives in `specs/`.
 
   Examples:
   - `chore(project): initialize repository with AGENTS.md and specs`
-  - `docs(specs): introduce ACL extension reference`
-  - `docs(specs): reframe SPEC.md around the ACE-ACL fork`
+  - `docs(specs): introduce AIL extension reference`
+  - `docs(specs): reframe SPEC.md around the ACE-AIL fork`

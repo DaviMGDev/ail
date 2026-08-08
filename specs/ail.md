@@ -1,24 +1,24 @@
 ---
 type: language-reference
-title: "ACL (Agent Controlled Language) — Extension Reference"
-description: "The ACL extension of ACE 6.7: superset guarantee, world model, control contexts, steps, Otherwise, For every, While, procedures, Stop!, failure semantics, fiat rulings, compatibility annex"
+title: "AIL (Agent Instruction Language) — Extension Reference"
+description: "The AIL extension of ACE 6.7: superset guarantee, world model, control contexts, steps, Otherwise, For every, While, procedures, Stop!, failure semantics, fiat rulings, compatibility annex"
 created: "2026-08-08"
 updated: "2026-08-08"
 ---
 
-# ACL (Agent Controlled Language) — Extension Reference
+# AIL (Agent Instruction Language) — Extension Reference
 
-ACL is a fork of [ACE 6.7](LANGUAGE.md) (Attempto Controlled English). It is a **strict superset** of ACE: every valid ACE text is a valid ACL text, and ACL adds the constructs needed to describe **sequences and procedures** — ordered steps, branching, loops, and named procedures over an explicit world model.
+AIL is a fork of [ACE 6.7](LANGUAGE.md) (Attempto Controlled English). It is a **strict superset** of ACE: every valid ACE text is a valid AIL text, and AIL adds the constructs needed to describe **sequences and procedures** — ordered steps, branching, loops, and named procedures over an explicit world model.
 
-ACL is a design exercise: no parser, compiler, or executor is planned. The specification itself is the language definition, so internal consistency is the quality bar. Where ACE is the base, [LANGUAGE.md](LANGUAGE.md) remains authoritative; this document defines only the extension.
+AIL is a design exercise: no parser, compiler, or executor is planned. The specification itself is the language definition, so internal consistency is the quality bar. Where ACE is the base, [LANGUAGE.md](LANGUAGE.md) remains authoritative; this document defines only the extension.
 
 Design rationale: `discussions/specs-directory/snapshots/` (esp. `2026-08-08-1706.md`).
 
 ## 1. Superset guarantee
 
-- Every valid ACE text is a valid ACL text; ACE content is never modified by this extension.
-- **ACL clarifies semantics, but never rejects syntax that ACE accepts.** Where ACE is underspecified, ACL may pin down a reading (see [Fiat rulings](#12-fiat-rulings)) — it may not declare an ACE construction invalid.
-- ACL adds semantics where ACE had none: most notably, order of commands (ACE texts are unordered) and a world model (ACE is stateless). These additions are the point of the fork and apply to ACL texts; they do not change what ACE texts *mean*.
+- Every valid ACE text is a valid AIL text; ACE content is never modified by this extension.
+- **AIL clarifies semantics, but never rejects syntax that ACE accepts.** Where ACE is underspecified, AIL may pin down a reading (see [Fiat rulings](#12-fiat-rulings)) — it may not declare an ACE construction invalid.
+- AIL adds semantics where ACE had none: most notably, order of commands (ACE texts are unordered) and a world model (ACE is stateless). These additions are the point of the fork and apply to AIL texts; they do not change what ACE texts *mean*.
 
 ## 2. World model
 
@@ -32,11 +32,11 @@ Rules:
 - The **knowledge** of a text (all declarative sentences outside procedure bodies, in any position) seeds the initial world: objects and facts are in force from the start, regardless of where the sentence appears.
 - **Commands** are actions that change the world. What exactly a command changes is the executor's domain semantics; the language does not define effects.
 - **Conditions** (in `If`/`While`) read the world. Condition evaluation is **closed-world**: a fact that is not entailed by the current world is false — every condition can always be evaluated.
-- **Declarative sentences inside a procedure body are assertions**: they add their objects and facts to the world at the point of execution. This is the ACL-native way to create entities mid-procedure (assert, then refer back with `the`).
+- **Declarative sentences inside a procedure body are assertions**: they add their objects and facts to the world at the point of execution. This is the AIL-native way to create entities mid-procedure (assert, then refer back with `the`).
 
 ## 3. Text structure
 
-An ACL text is a sequence of sentences, with three roles:
+An AIL text is a sequence of sentences, with three roles:
 
 | Role | Form | Meaning |
 |---|---|---|
@@ -45,7 +45,7 @@ An ACL text is a sequence of sentences, with three roles:
 | Procedures | `Procedure` headers with bodies | named, parameterized step sequences (see [§8](#8-procedures)) |
 
 - **Queries** (`?`) are valid at top level (superset), but are **not steps**: tests appear only in `If`/`While` conditions. The procedure grammar has no interrogative production.
-- A text with no imperative sentences is pure ACE — a valid ACL text with an empty main sequence.
+- A text with no imperative sentences is pure ACE — a valid AIL text with an empty main sequence.
 
 ## 4. Control contexts and ordering
 
@@ -57,7 +57,7 @@ In a control context, a command **may omit the addressee**; the addressee is the
 
 A **step** is one of:
 
-1. a **command** — with explicit addressee (ACE) or implicit (ACL control context): `Insert the card!`
+1. a **command** — with explicit addressee (ACE) or implicit (AIL control context): `Insert the card!`
 2. a **procedure call** — a procedure name with an argument list in command position: `check-card(the card)!`
 3. an **if-otherwise construct** — see [§6](#6-branching-otherwise)
 
@@ -143,11 +143,11 @@ Procedure check-card(Card C):
 
 - Conditions always evaluate (closed world) — there is no "unevaluatable".
 - A step that **cannot be performed** aborts the whole run at that point. Impossible steps are: a command or branch referring to an entity with no accessible antecedent, a call to an undefined procedure, or a call with a type-mismatched argument.
-- There is no recovery: no rollback, no try/catch, no `Otherwise`-on-failure. Side effects performed before the failing step persist. (Failure *handling* is the natural add-on if ACL ever gains an executor — deliberately out of scope.)
+- There is no recovery: no rollback, no try/catch, no `Otherwise`-on-failure. Side effects performed before the failing step persist. (Failure *handling* is the natural add-on if AIL ever gains an executor — deliberately out of scope.)
 
 ## 12. Fiat rulings
 
-Where ACE is underspecified, ACL pins down readings (clarification only — never rejection, per [§1](#1-superset-guarantee)):
+Where ACE is underspecified, AIL pins down readings (clarification only — never rejection, per [§1](#1-superset-guarantee)):
 
 - `some` occurs with **plural and mass nouns only** (`some cards`, `some water`); the singular indefinite is `a`.
 - **Superlative adjectives take `the`** (`the richest customer`); comparatives take any determiner (`a richer customer`).
@@ -180,8 +180,8 @@ If the card is valid then accept the card! Otherwise reject the card!
 
 ## 14. Compatibility annex
 
-- **Guarantee:** every valid ACE 6.7 text is a valid ACL text. If a construction is accepted by ACE (per the official Construction Rules), ACL accepts it.
-- **Clarification:** where the official rules are silent or ambiguous, ACL's rulings ([§12](#12-fiat-rulings)) apply to the ACL reading of a text.
+- **Guarantee:** every valid ACE 6.7 text is a valid AIL text. If a construction is accepted by ACE (per the official Construction Rules), AIL accepts it.
+- **Clarification:** where the official rules are silent or ambiguous, AIL's rulings ([§12](#12-fiat-rulings)) apply to the AIL reading of a text.
 - **Conformance corpus:** the examples marked * in [LANGUAGE.md](LANGUAGE.md) (counterexamples) and the examples in this document form a working corpus; any ACE-valid example from the official documentation is admissible as a conformance test. A dedicated corpus file may be added to `specs/` later.
 - **Divergence:** this annex records the only intentional divergence from ACE — the addition of ordering and world-model semantics in control contexts ([§2](#2-world-model), [§4](#4-control-contexts-and-ordering)). Nothing in ACE is rejected.
 
