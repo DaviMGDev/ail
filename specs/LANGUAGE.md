@@ -1,172 +1,443 @@
 ---
 type: language-reference
-title: "ACE 6.7 — Syntax and Practical Reference"
-description: "Practical reference for the Attempto Controlled English 6.7 syntax: golden rules, noun/verb phrases, sentences, queries, commands, semantics"
+title: "SAE — Structured Agent English Reference"
+description: "The SAE language reference: two layout modes, block model, conditions, repetition, failure behavior, procedures, scenarios, style, profiles"
 created: "2026-08-08"
-updated: "2026-08-08"
+updated: "2026-08-14"
 ---
 
-# ACE 6.7 — Syntax and Practical Reference
+# Structured Agent English (SAE)
 
-Attempto Controlled English (ACE) is a controlled natural language from the University of Zurich (since 1995, current version **6.7**). It is a strict subset of English with restricted syntax and semantics: every valid ACE text is correct English and translates **unambiguously** into first-order logic (via Discourse Representation Structures, DRS). It is a formal language that happens to read like English.
+Structured Agent English (SAE) is a controlled subset of English for writing agent instructions that remain understandable to an ordinary reader even without access to this specification.
 
-Sentences marked with `*` are **not** valid ACE — they serve as counterexamples.
+SAE has one primary design goal:
 
-## Golden rules
+> A person who reads a SAE text for the first time should be able to understand what the agent is supposed to do, in what order, under what conditions, and with what expected effects.
 
-1. **Every noun needs a determiner.** `*Women are human.` is invalid → `Every woman is a human.`
-2. **Verbs are 3rd person simple present** in declaratives/interrogatives; **2nd person** in commands. No tenses, no aspect.
-3. **Hyphenate** multiword proper names (`United-Nations`), phrasal verbs (`fills-in`), and prepositions attached to transitive verbs/adjectives (`interested-in`).
-4. **Passives require a `by` phrase**: `A card is entered by John.`
-5. **Punctuation is semantic**: declaratives end with `.`, queries with `?`, commands with `!`.
-6. **No `whom`** — use `who`.
-7. **Anaphora rules**: `a`/`some` introduce new entities, `the` refers back to an already-introduced entity, pronouns resolve to the most recent compatible antecedent.
+SAE is therefore not optimized for the smallest grammar or the most compact formal notation. It is optimized for readable, disciplined English that can later receive precise semantics. SAE is a design exercise: no parser, compiler, or executor is planned. The specification itself is the language definition, so internal consistency is the quality bar.
 
-## Vocabulary
+**Heritage.** SAE's ancestry is Attempto Controlled English 6.7 (see [ace.md](ace.md)) and its former fork AIL (see [ail.md](ail.md)). SAE is **not** an extension of either: it deliberately abandons ACE's formal machinery (punctuation-as-semantics, determiner grammar, hyphenation, anaphora rules) in favor of disciplined ordinary English. The migration from AIL is mapped in [ail.md](ail.md).
 
-- **Function words** (predefined, not user-extensible): determiners, quantifiers, coordinators, negation words, pronouns, query words, modal auxiliaries, copula `be`, Saxon genitive `'s`.
-- **Fixed phrases**: `there is/are …`, `it is false that …`, `it is possible that …`, `it is not provable that …`
-- **Content words** (user-defined): nouns, verbs, adjectives, adverbs, prepositions. Simple (`code`) or hyphenated compounds (`check-code`).
+## 1. Design principles
 
-## Noun phrases
+A SAE text should read as ordinary technical English.
 
-### Determiners (singular countable)
+- Every construct should explain itself through normal English wording.
+- Headings should reveal the role of a block without requiring prior training.
+- Order should be shown by numbering and layout, not by hidden punctuation rules.
+- Conditions should be written with ordinary `If` clauses.
+- Repetition should be written with ordinary phrases such as `For each` and `While`.
+- Failure behavior should be stated explicitly, with a safe default when it is not.
+- Important state changes should be stated in English, not hidden behind a verb name.
 
-| Form | Meaning |
-|---|---|
-| `a card` / `1 card` / `one card` | existential (interchangeable) |
-| `the card` | anaphoric (already introduced) |
-| `every card` / `each card` | universal (interchangeable) |
-| `not every card` / `not each card` | negated universal |
-| `no card` | negated existential |
-| `all cards` | sugar for `every card` |
-| `no cards` | sugar for `no card` |
+## 2. Blocks and modes
 
-### Plural & mass nouns
+A SAE text is a **free sequence of blocks**. No block kind is required, ordered, or unique: a text may contain any blocks in any order, several of the same kind, or none of them. A block's kind is carried by its own heading or by its layout — never by a document skeleton.
 
-- Collective: `the cards`, `some cards`, `3 cards`, `three cards`
-- Distributive: `each of the cards`, `each of some cards`, `each of 3 cards`
-- Mass: `some water`, `no water`, `all water`, `not all water`
-- Integers ≤ 12 can be written as words (`twelve cats`); larger ones must be digits.
+Exactly **two modes** carry semantics. Everything else is labeling:
 
-### Generalized quantifiers
+| Mode | Form | Meaning |
+|---|---|---|
+| Ordered steps | numbered lists | the flow to execute, in written order |
+| Unordered statements | everything unnumbered at top level | knowledge: facts, rules, definitions — order-free |
 
-`at least 2 cards`, `at most 2 cards`, `more than 10 cards`, `less than 3 cards`, `exactly 3 cards` — and distributive `each of at least 2 cards`, etc.
+A top-level line that is not numbered is knowledge, wherever it appears. To make the agent act, give the line a number.
 
-### Other noun phrase forms
+**Resumptive numbering.** A numbered list continues as long as its numbers increase. An unnumbered line between steps is inert knowledge; the list resumes around it. A list that restarts at `1.` opens a new flow.
 
-- **Proper names**: `John`, `Mr-Miller`, `the United-Nations` (multiwords hyphenated; singular or plural; with or without `the`)
-- **Numbers**: integers `0`, `12`, `-2`; reals `3.141`, `-2.718` (no `+` prefix)
-- **Arithmetic**: `1 + 2 / X * 4`, `2 ^ (3 ^ 4)` — precedence applies, APE does not evaluate
-- **Strings**: `"abc"`, escaping with `\"` and `\\`, concatenation `"abc" & "123"`
-- **Sets/lists**: `{3, 6, [1,2]}`, `[3, 4, 5, "ab", John, 1+2]`; e.g. `X is an element of [3, 4, 5]`
-- **Measurement nouns**: `2 m`, `31.2°C`, `1.4 l of water`, `3 kg of apples` (singular or plural verb)
-- **Variables**: single uppercase letter + optional integer, introduced as apposition — `A man X sleeps. X is young.`; bare variables allowed — `X weighs 300 kg.`
-- **Pronouns**: `he/she/it/they`, `him/her/them`; reflexive `himself/herself/itself/themselves`; `you/yourself/yourselves` (commands only); indefinite `someone/somebody`, `no one/nobody`, `everything`, `not everyone`
-- **Genitives**: `John's customer`, `a customer of John`, `everybody's customer`, `X's dog`, `his customer`, `his own customer`
-- **`nobody but` / `nothing but` / `no … but`**: `nothing but apples`, `nobody but John`, `no man but John` (bare plurals, mass nouns, proper names)
+```text
+1. The agent opens the inbox.
+2. The agent reads each ticket.
 
-### Modifying nouns
+Facts:
+- Ticket T-14 is open.
 
-- **Adjectives** (positive/comparative/superlative, conjoinable): `a rich customer`, `a rich and satisfied customer`, `a richer customer`, `a richest customer`
-- **Relative clauses** with `who`/`which`/`that`, coordinate with `and`/`or`: `a customer who is rich and who is well-known`, `everything which is important`, `John who waits`
-- **Apposition variables**: `a customer X`, `the customer C1`
-
-## Verb phrases
-
-- **Verb types**: intransitive (`wait`), transitive (`enter something`), ditransitive (`give something to somebody` / `give somebody something`)
-- **Active ↔ passive**: `John enters a card.` = `A card is entered by John.`; `John gives a card to a customer.` = `A card is given to a customer by John.`
-- **Copula `be`** + noun phrase / adjective phrase / prepositional phrases: `John is a rich customer.`, `John is rich.`, `John is in the garden on the hill.`, `John is who?`
-- **Comparison**: `as rich as Mary`, `richer than Mary`, `as fond-of Mary as Bill`, `more fond-of Mary than of Sue`
-- **Negation**: `John does not enter a code.`, `The men do not wait.`, `Some water is not drinkable.`
-- **Negation as failure**: `John does not provably wait.`, `The men are not provably admitted.`
-- **Modals**: possibility `can / cannot / can not / can't`; necessity `must / have to / does not have to`; recommendation `should / should not / shouldn't`; admissibility `may / may not`
-- **Coordination**: `John waits and eats a burger.`, `John is rich or earns his own income.`
-- **Modifiers**: adverbs & prepositional phrases before or after the verb phrase — `A customer manually inserts a card into a slot.`; two+ adverbs conjoin with `and` (`carefully and manually`), two+ PPs concatenate (`in a bank in the morning`)
-
-## Sentences
-
-### Basic structure
-
-```
-subject + verb + complements + adjuncts
+3. The agent closes the inbox.
 ```
 
-`A customer waits.` · `A customer inserts a card.` · `A customer gives a clerk a card.` · `A customer inserts a card manually into a slot.`
+Steps `1.`–`3.` form one flow; the `Facts:` block sits inside it as knowledge.
 
-### `there is/are` sentences
+**Two-axis rule.** Numbering gives order; indentation gives flow membership. Lines indented under a step belong to that step: the consequences of an `If`, the body of a `For each` or `While`, or lettered substeps (`a.`, `b.`, `c.`). An indented declarative sentence is an **assertion** — a state change performed at that point of execution. A top-level declarative is knowledge; an indented one is an effect.
 
-Introduce (or deny) entities — no definite/universal NPs, proper names, numbers, strings, sets, or lists allowed after them:
+```text
+2. If the code is correct:
+   the card is valid.
+```
 
-`There is a customer.` · `There are a cat and 2 dogs.` · `There is no man who sleeps.` · `*There is a cat in a garden.` (→ `There is a cat that sleeps.`)
+`the card is valid.` is an assertion inside step 2's flow: when the condition holds, the card *becomes* valid.
 
-### Boolean formulas
+### Recommended labels
 
-Sentences built with comparison operators `=`, `\=`, `>`, `>=`, `<`, `=<`: `10 = 4 + 6.`, `X \= 2.`, `X >= 13.4 and X =< 20.` (APE does not evaluate)
+The draft vocabulary of content kinds is a **recommended labeling convention, not a contract**. Authors use these English headings because they orient the reader; the language promises nothing about them beyond the two modes. A profile may pin specific labels if it wants to.
 
-### Coordination
+- `Facts:` — what exists and what is true.
+- `Rules:` — what must hold when certain conditions hold.
+- `Actions:` — what a named action means, including effects and failure conditions.
+- `Task:` / `Tasks:` — ordered instructions.
+- `Scenario:` / `Scenarios:` — examples or tests of expected behavior.
+- `Purpose:` — why the text exists.
+- `Starting facts:` — the initial world of a scenario.
+- `Expected results:` — what must hold afterwards. **Normative exception:** inside a Scenario block, an explicit `Expected results:` section is verified after the task steps; see [§11 Scenarios](#11-scenarios).
+- `Failure behavior:` — standing failure rules; see [§8 Failure behavior](#8-failure-behavior).
 
-- `and` / `or` between sentences, verb phrases, relative clauses, noun phrases
-- **`and` binds stronger than `or`** (standard logic binding order); `,and` and `,or` override it
-- `The screen blinks or John waits, and Mary enters a card.`
-- Noun-phrase coordination forms a plural: `A man and at least 2 women wait. They are tired.`
+Unrecognized headings are inert English. A short prompt may be nothing but a numbered list.
 
-### Quantification
+## 3. Facts and rules
 
-- **Existential**: indefinite determiner (`a`, `some`) or `there is/are`
-- **Universal**: `every`/`each`, or if-then: `Every man waits.` = `If there is a man X then the man X waits.`
-- **Scope** extends to end of sentence (or coordinated clause)
-- **Global quantification** (sentence-initial): `There is a code that every clerk enters.`, `For every code a clerk enters it.`, `For each of 3 men there is a bed.`, `For all water there is a container.`
-- Scope control: `Every customer inserts a card.` (each may insert a different card) vs. `A card is inserted by every customer.` (same card)
+Facts and rules are unordered statements — knowledge. The distinction is didactic, not semantic: facts are ground statements, rules are conditionals. Both may appear anywhere, in any order, any number of times.
 
-### Subordination (five forms)
+```text
+Facts:
 
-| Form | Example |
-|---|---|
-| Conditional (if-then) | `If a card is valid then a customer inserts it.` |
-| Sentence negation | `It is false that a screen blinks.` / `It is not true that …`; repeat `that` in coordinations: `It is false that a screen blinks and that John enters a code.` |
-| Negation as failure | `It is not provable that a screen blinks.` |
-| Modality | `It is possible/not possible/necessary/not necessary/recommended/not recommended/admissible/not admissible that …` |
-| Sentence subordination | `A clerk believes that a customer inserts a card.`; same-subject shortening: `John wants to insert a card.`; modifiers must precede the main verb: `John eagerly in the morning wants to insert a card.` |
+- Every ticket has a title.
+- Every ticket has a status.
+- A ticket is either open or closed.
+- Ticket T-14 is open.
 
-## Queries (end with `?`)
+Rules:
 
-- **Yes/no**: `Does John enter a card?`, `Is the card valid?`, `Is it true that a man waits?`
-- **wh-queries** (`who`, `whose`, `what`, `which`, `how`, `where`, `when` — every element except the verb is queryable): `Who waits?`, `Which customer inserts a card?`, `What does a man not eat?`, `How does John enter a card?`, `Whose dog barks?` — most have alternative word orders: `John waits where?`
-- **How much/many**: `How much water boils?`, `How many men have how many apples?`
+- If a ticket mentions a security problem, the ticket has critical priority.
+- If a ticket is closed, the ticket has a resolution.
+- No ticket is both open and closed.
+```
 
-## Commands (end with `!`)
+A rule may be a single sentence or a block:
 
-Addressee (noun phrase) + comma + (negated, uncoordinated) verb phrase:
+```text
+If a ticket is closed, the ticket has a resolution.
+```
 
-`John, go to your own bank!` · `John and Mary, clean yourselves!` · `Every dog, do not bark!` · `John's brother, return the book to Mary!`
+```text
+If a ticket is closed:
+  the ticket has a resolution.
+```
 
-## Texts & semantics (interpretation rules)
+## 4. Actions
 
-- An **ACE text** is a sequence of declarative/interrogative/imperative sentences; anaphora links them — `A man has a car. Does he see the car? John, identify the car!`
-- `a`/`some` → **existential** ∃; `every`/`each` → **universal** ∀; `the`/pronouns → **anaphoric reference**
-- DRS output can be translated to OWL, SWRL, AceRules, and first-order logic (for theorem proving, consistency checking, querying)
+An action definition explains what a named action means. This matters because verbs such as `accept`, `classify`, `save`, or `escalate` often hide crucial effects. Action definitions are knowledge — unordered statements — conventionally gathered under an `Actions:` label.
 
-## Cheat sheet
+```text
+Actions:
 
-| Want to say | Write |
-|---|---|
-| Existence | `A customer inserts a card.` |
-| Universality | `Every customer inserts a card.` |
-| Rule | `If a card is valid then a customer inserts it.` |
-| No | `No customer inserts more than 2 cards.` |
-| Not (verb) | `A customer does not insert a card.` |
-| Not (sentence) | `It is false that a customer inserts a card.` |
-| Modality | `A customer can/must insert a card.` / `It is possible that …` |
-| Passive | `A card is inserted by a customer.` |
-| Variable | `A customer X inserts a card. X is trusted.` |
-| Global scope | `For every card there is a customer who inserts it.` |
-| Ask | `Does a customer insert a card?` / `What does a customer insert?` |
-| Command | `Customer, insert a card!` |
+Action: Accept a card.
 
-## Tools & resources
+- The agent may accept a card only if the card is valid.
+- When the agent accepts a card:
+  - the card becomes accepted;
+  - the card becomes not rejected;
+  - the system records the acceptance.
+- If the card is not valid, the action fails.
+```
 
-- **APE** (Attempto Parsing Engine) — reference parser; web demo at attempto.ifi.uzh.ch; outputs DRS / FOL / OWL / SWRL
-- **AceWiki** — semantic wiki powered by ACE; **AceRules** — rule engines over ACE
-- **ACE-in-GF** (github.com/Attempto/ACE-in-GF) — ACE 6.7 syntax ported to ~20 natural languages via Grammatical Framework
-- **Official docs**: ACE 6.7 Construction Rules (syntax), Interpretation Rules (semantics), Troubleshooting Guide, Language Manual — attempto.ifi.uzh.ch
+Recommended parts: name, preconditions, effects, failure conditions, optional outputs. A more explicit format is also fine:
+
+```text
+Action: Save a ticket.
+
+Preconditions:
+- The ticket exists.
+
+Effects:
+- The system stores the latest version of the ticket.
+- The ticket becomes saved.
+
+Failure conditions:
+- If the storage service is unavailable, the action fails.
+```
+
+## 5. Tasks
+
+A task is ordered instructions: a numbered flow, conventionally introduced by a `Task:` heading with a title. The order of execution is the written order of numbered steps and nested substeps.
+
+```text
+Task: Process every open ticket.
+
+1. The agent finds every ticket whose status is open.
+2. For each open ticket:
+   a. The agent reads the ticket.
+   b. If the ticket mentions a security problem:
+      the agent assigns critical priority.
+   c. If the ticket does not mention a security problem:
+      the agent assigns priority according to the priority rules.
+   d. The agent saves the ticket.
+3. The agent reports the number of processed tickets.
+```
+
+A step may contain: a plain action sentence; a conditional block; a repetition block; a nested lettered substep sequence. Whether two separated flows are "the same task" is not a semantic notion — each numbered flow is its own ordered unit, and a `Task:` label is annotation.
+
+## 6. Conditions
+
+Conditions are written with ordinary `If` clauses.
+
+Inline form:
+
+```text
+If the card is valid, the agent accepts the card.
+```
+
+Block form:
+
+```text
+If the card is valid:
+  the agent accepts the card.
+```
+
+The explicit negative form is preferred when clarity matters:
+
+```text
+If the card is not valid:
+  the agent rejects the card.
+```
+
+### `Otherwise`
+
+`Otherwise` is ordinary English, not a reserved keyword. The two-axis rule does the pairing: an `Otherwise:` line at the same indentation as its `If`, immediately following it, pairs with that `If` and means the complementary case.
+
+```text
+If the card is valid:
+  the agent accepts the card.
+Otherwise:
+  the agent rejects the card.
+```
+
+Chains are possible — `Otherwise, if ...` — but stacked alternatives deserve explicit conditions or a new numbered flow.
+
+### Evaluation
+
+Conditions are evaluated **open-world**, as a tri-state:
+
+- a condition the agent knows to be true takes its branch;
+- a condition the agent knows to be false takes the complementary branch;
+- a condition the agent **cannot determine** (unknown entity, missing fact) makes the step **fail**, which rides the failure behavior of [§8](#8-failure-behavior).
+
+Uncertainty never silently resolves to a branch. Authors may override in plain English ("If you cannot determine whether C, continue as though C is false."). A profile may opt into closed-world evaluation where a domain genuinely guarantees complete knowledge.
+
+## 7. Repetition
+
+### `For each`
+
+`For each` iterates over a known collection or selected set. The collection is **fixed when the loop starts** — a snapshot at entry: entities introduced or changed by the body do not alter the iteration.
+
+```text
+For each open ticket:
+  the agent reads the ticket.
+```
+
+When precision matters, bind a named entity:
+
+```text
+For each ticket T whose status is open:
+  the agent reads ticket T.
+```
+
+When the author wants to pin a collection across several loops, or to freeze it at a moment other than loop entry, the snapshot becomes an explicit, communicative step:
+
+```text
+The agent takes a snapshot of the open tickets.
+For each ticket T in that snapshot:
+  the agent reads ticket T.
+```
+
+### `While`
+
+`While` is the live construct: the condition is re-evaluated before each pass.
+
+```text
+While the queue is not empty:
+  the agent removes one card from the queue.
+```
+
+Termination is the author's responsibility — the language defines no effects, so it cannot guarantee that a body changes the world. Termination conditions should be obvious from the text; if they are not obvious, state them explicitly.
+
+## 8. Failure behavior
+
+When a step fails and nothing is written about it, the default applies: **the agent stops and reports**. A report is a plain-English report to the issuing channel, stating the failed step and the observed condition. This default is what an ordinary reader already assumes — a subordinate asked to do a thing who cannot do it comes back and says so.
+
+Failure clauses read as **deltas on that baseline**, in a three-layer cascade:
+
+1. an indented `If ... fails:` override attached to the step;
+2. any applicable standing failure rules (top-level conditional knowledge, conventionally under a `Failure behavior:` label);
+3. the default: stop and report.
+
+```text
+Failure behavior:
+
+- If the agent cannot read the card, the agent reports "unreadable card" and stops.
+- If the agent cannot save a ticket, the agent retries once.
+- If the retry fails, the agent reports the failure and continues with the next ticket.
+```
+
+A local clause overrides per step:
+
+```text
+2. The agent saves the ticket.
+   If saving fails:
+   a. the agent retries once.
+   b. If the retry fails:
+      the agent reports the ticket and continues with the next ticket.
+```
+
+After the override's retry fails, everything the override did not mention falls back to the default: stop and report.
+
+Failure outcomes — `stop`, `retry`, `continue`, `report`, `escalate` — are ordinary English, not a pinned vocabulary. Precision lives in the surrounding sentences ("retries once", "escalates to the billing team"). A bare "retries" means the agent retries some number of times and then the default applies. A profile may tighten any of this.
+
+## 9. State changes
+
+When an action changes the world in an important way, the change should be stated explicitly. Inside a flow, declarative statements are assertions — they make the world match the sentence at that point.
+
+Preferred forms:
+
+```text
+As a result, the ticket becomes closed.
+As a result, the card is accepted.
+As a result, the queue no longer contains the card.
+```
+
+This avoids hiding important semantics inside a single verb.
+
+## 10. Procedures
+
+A reusable task is introduced with a `To ...` title and a numbered body:
+
+```text
+To validate a card:
+
+1. The agent reads the code on the card.
+2. If the code is correct:
+   the card is valid.
+3. If the code is not correct:
+   the card is invalid.
+```
+
+A `To`-block is top-level knowledge — globally visible, executed only when invoked.
+
+**Invocation binds by ordinary-English understanding.** When a step says the agent does what a procedure's title describes, with the title's subjects and objects supplied, that procedure's steps are followed at that point. Matching is at the linguistic level, not the string level: `To validate a card` is invoked by `the agent validates the card`, in any voice.
+
+```text
+Task: Process the queue.
+
+1. For each card in the queue:
+   the agent validates the card.
+```
+
+**Parameters.** Indefinite noun phrases in the title are parameter slots, filled in order of first appearance by the invocation's corresponding noun phrases; definite noun phrases in a title denote context, not slots. Inside the body, `the card` refers to the bound argument. Repeated same-role noun phrases bind by first-occurrence order — prefer role-distinguishing wording instead of relying on that.
+
+**No match is not an error.** An invocation phrase that matches no `To`-title is an ordinary action, performed under the executor's native understanding, subject to the normal failure behavior. Procedures are additive definitions, not a registry.
+
+**Recursion is allowed**; termination is the author's responsibility. State the base case visibly and name a smaller instance in each recursive step.
+
+A stricter profile may map `To validate a card` to an internal name such as `validate-card`, require exact quoting, or error on unmatched invocations — the surface form should remain readable as English.
+
+## 11. Scenarios
+
+A scenario describes an example of expected behavior — useful as tests, demonstrations, and documentation.
+
+```text
+Scenario: A valid card is accepted.
+
+Starting facts:
+- Card C exists.
+- The code on card C is correct.
+
+Task:
+1. The agent validates card C.
+
+Expected results:
+- Card C is valid.
+- Card C is accepted.
+- Card C is not rejected.
+```
+
+The `Scenario:` label itself carries no contract. The one normative exception: an explicit `Expected results:` section inside a scenario block is **verified** after the task steps complete. An expectation that is false — or that the agent cannot verify — is a failed outcome following [§8](#8-failure-behavior), with the report stating expected versus actual in plain English. An illustrative scenario simply omits the section.
+
+## 12. Style
+
+SAE uses ordinary English sentences, but with discipline.
+
+- Use simple present tense.
+- Use active voice.
+- Use explicit subjects such as `the agent`, `the system`, `the reviewer`, or a named entity.
+- Repeat nouns when necessary instead of relying on unclear pronouns.
+- Prefer short sentences over compact but ambiguous wording.
+- Prefer explicit complementary conditions over a distant or ambiguous `Otherwise` — especially when text may be copied or reformatted.
+- Prefer headings over hidden modes; numbered steps over punctuation-driven sequencing; visible effect statements over unexplained action verbs.
+
+Good:
+
+```text
+If the ticket describes a security problem:
+  the agent assigns critical priority.
+
+If the ticket does not describe a security problem:
+  the agent assigns priority according to the priority rules.
+```
+
+Less preferred (allowed when the pairing is visually obvious):
+
+```text
+If the ticket describes a security problem:
+  assign critical priority.
+Otherwise:
+  assign priority according to the priority rules.
+```
+
+A text that is formally valid but difficult for an ordinary reader is poor SAE style.
+
+## 13. Profiles
+
+SAE leaves strictness to **profiles** — declared execution policies that may tighten the base language where a domain needs determinism:
+
+- pin label vocabulary and semantics;
+- require exact or quoted procedure invocations;
+- opt into closed-world condition evaluation;
+- tighten the failure default or define report channels;
+- limit recursion or loop budgets.
+
+A profile's trade-off is declared, not smuggled into the base. The base language's promise is readability: the reader's understanding of the surface English is the canonical semantics.
+
+## 14. Minimal example
+
+```text
+Facts:
+- Every card has a code.
+
+Rules:
+- If the code on a card is correct, the card is valid.
+
+Task: Validate a card.
+
+1. The agent reads the code on the card.
+2. If the code is correct:
+   the card is valid.
+3. If the code is not correct:
+   the card is invalid.
+4. If the card is valid:
+   the agent accepts the card.
+5. If the card is not valid:
+   the agent rejects the card.
+
+Failure behavior:
+- If the agent cannot read the code, the agent reports "unreadable code" and stops.
+```
+
+## 15. Authoring guidance
+
+When writing SAE:
+
+- Start with facts and rules.
+- Define important actions when their effects are not obvious.
+- Write tasks as numbered instructions.
+- Use plain English control words: `If`, `For each`, `While`, `As a result`, `If ... fails`.
+- Make stopping, retrying, and continuation explicit — or rely on the safe default, knowingly.
+- Write for an untrained reader first, and only then for a strict profile.
+
+## 16. Non-goals
+
+SAE does not try to be:
+
+- maximally compact;
+- symbol-heavy;
+- dependent on special punctuation for meaning;
+- readable only after memorizing a reference manual.
+
+The language is successful only if the intended behavior is visible in the surface English itself.

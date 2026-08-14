@@ -1,52 +1,53 @@
 ---
 type: spec
-title: "ACE / AIL — Specification"
-description: "Spec monolith for the ACE language documentation set and its fork AIL (Agent Instruction Language): context, users, conformance, and decisions; the language content lives in the citizen files LANGUAGE.md and ail.md"
-tags: [spec, controlled-natural-language, ace, ail]
+title: "SAE — Specification"
+description: "Spec monolith for Structured Agent English (SAE), a readability-first controlled English for agent instructions: context, users, conformance, and decisions; the language content lives in the citizen files LANGUAGE.md (SAE reference), ace.md (heritage), and ail.md (migration note)"
+tags: [spec, controlled-natural-language, sae]
 created: "2026-08-08"
-updated: "2026-08-08"
+updated: "2026-08-14"
 sections: [context, users, conformance, decisions]
 ---
 
-# ACE / AIL — Specification
+# SAE — Specification
 
 ## Context
 
-Attempto Controlled English (ACE) is a controlled natural language developed at the University of Zurich since 1995 (current version 6.7). It is a strict subset of English that is human-readable yet translates unambiguously into first-order logic, serving as a knowledge representation, specification, and query language.
+Structured Agent English (SAE) is a controlled subset of English for writing agent instructions. Its primary design goal: a person who reads a SAE text for the first time should be able to understand what the agent is supposed to do, in what order, under what conditions, and with what expected effects — without access to the formal specification.
 
-**AIL (Agent Instruction Language)** is a fork of ACE: a strict superset that keeps ACE fully intact and adds sequences and procedures for describing agent behaviour. Where ACE is declarative (a text is an unordered set of sentences), AIL adds control: ordered steps, branching, loops, and named procedures, over an explicit world model. AIL is a design exercise — the specification is the artifact; no parser or tooling is planned. The ACE base reference lives in [LANGUAGE.md](LANGUAGE.md); the AIL extension reference lives in [ail.md](ail.md).
+SAE is therefore optimized for readable, disciplined English, not for the smallest grammar. Its normative core is deliberately small: exactly two semantic modes carried by visible layout — **ordered steps** (numbered lists, resumptive) and **unordered statements** (knowledge) — plus one safe failure default (stop and report), open-world tri-state conditions, English-phrase procedure binding, and one narrow exception (an explicit `Expected results:` section in a scenario is verified). Content-kind labels (Facts, Rules, Actions, Tasks, Scenarios) are a recommended vocabulary, not a contract; strictness lives in **profiles**. The full language reference is [LANGUAGE.md](LANGUAGE.md).
 
-Design context: the full decision record for AIL is captured in `discussions/specs-directory/snapshots/` (see esp. `2026-08-08-1706.md`).
+SAE is a design exercise: no parser, compiler, or executor is planned — the specification itself is the language definition, so internal consistency is the quality bar.
+
+**Heritage.** SAE descends from Attempto Controlled English 6.7 ([ace.md](ace.md), kept as a heritage reference) and its former fork AIL ([ail.md](ail.md), kept as a migration note). SAE is a **formal break** from both: it abandons ACE's formal machinery (punctuation-as-semantics, determiner grammar, hyphenation, anaphora rules) and retires the ACE superset guarantee. The reframing decision record is `.pi/discussions/sae-reframing/` (proposal v1, accepted 2026-08-14).
 
 ## Users
 
-- Knowledge engineers and ontologists writing OWL/SWRL content via ACE
-- Specifiers who want formal, unambiguous requirements without learning logic notation
-- Readers and writers of ACE texts (queries, rules, domain descriptions)
-- Authors of AIL texts: people describing agent behaviour as sequences/procedures (knowledge section + control section)
+- **Authors of agent instruction texts** — prompt engineers, skill authors, automation designers writing what an agent should do, in what order, under what conditions.
+- **Readers and reviewers** — anyone who must understand an instruction text without prior training; SAE's readability contract is written for them.
+- **Executors** — language-understanding agents (typically LLMs) that carry out the texts; the reader's understanding of the surface English is the canonical semantics.
+- **Profile authors** — people who need determinism beyond the base language: pinned labels, exact invocation matching, closed-world conditions, tightened failure defaults.
 
 ## Conformance
 
-The conformance contract of this specification set has two levels:
+Conformance of a SAE text is judged against [LANGUAGE.md](LANGUAGE.md); there is no parser, so the rules are structural and readable. Acceptance criteria (EARS):
 
-- **ACE base** — conformance is defined by the official ACE 6.7 Construction Rules (attempto.ifi.uzh.ch), the authoritative external contract; [LANGUAGE.md](LANGUAGE.md) is the in-repo reference that documents what makes a text valid ACE.
-- **AIL extension** — conformance is the superset guarantee: every valid ACE text SHALL also be a valid AIL text; AIL SHALL clarify readings where ACE is underspecified, but SHALL never reject syntax that ACE accepts. The compatibility annex in [ail.md](ail.md) → Compatibility verifies this per construct.
-
-Acceptance criteria (EARS):
-
-- The ACE base reference SHALL document noun phrases, verb phrases, and sentence forms with valid examples.
-- The ACE base reference SHALL document the golden rules (determiner requirement, tense restriction, hyphenation, punctuation).
-- The AIL reference SHALL define control contexts (main sequence, procedure bodies) and their ordering semantics.
-- The AIL reference SHALL define the world model (objects, facts, closed-world condition evaluation).
-- The AIL reference SHALL define the extension constructs — implicit-addressee commands, `Otherwise`, `For every`, `While`, `Procedure`/calls, `Stop!` — with examples.
-- The AIL reference SHALL state the superset guarantee: every valid ACE text is a valid AIL text, and AIL clarifies semantics but never rejects ACE syntax.
+- **WHEN** a text contains numbered lists, **THE** numbered lines SHALL be the ordered flow and **SHALL** execute in written order.
+- **WHEN** a numbered list resumes after an interruption, **THE** list SHALL continue while its numbers increase; a list restarting at `1.` SHALL open a new flow.
+- **WHEN** a line is indented under a step, **THE** line SHALL belong to that step's flow; an indented declarative SHALL be an assertion performed at that point; a top-level unnumbered line SHALL be knowledge.
+- **WHEN** a `For each` loop starts, **THE** iterated collection SHALL be fixed at loop entry; **WHEN** a `While` loop repeats, **THE** condition SHALL be re-evaluated before each pass.
+- **WHEN** a step fails and no failure clause applies, **THE** agent SHALL stop and report (plain English to the issuing channel: failed step and observed condition); failure clauses SHALL read as deltas on that default, in the order: step-local override, standing failure rules, default.
+- **WHEN** a condition cannot be determined, **THE** step SHALL fail rather than take a branch; closed-world evaluation SHALL require a declared profile.
+- **WHEN** a step's action phrase matches a `To`-title by ordinary-English understanding, **THE** procedure's steps SHALL be followed at that point; an invocation matching no title SHALL be an ordinary action.
+- **WHEN** a scenario block contains an explicit `Expected results:` section, **THE** expectations SHALL be verified after the task steps; a false or unverifiable expectation SHALL be a failed outcome reported as expected versus actual.
+- **WHEN** a text uses labels outside the recommended vocabulary, **THE** labels SHALL be inert; only a declared profile SHALL pin them.
 
 ## Decisions
 
-- The syntax content is a single citizen file, LANGUAGE.md, rather than sections inside SPEC.md — the language reference is the primary artifact of this directory. (2026-08-08)
-- SPEC.md stays light; most checklist sections are marked not-applicable rather than fabricated. (2026-08-08)
-- AIL is a fork of ACE defined as a strict superset: every valid ACE text remains a valid AIL text; the ACE base reference stays untouched and authoritative for the base language. (2026-08-08)
-- The AIL extension lives in its own citizen file, ail.md, rather than inside LANGUAGE.md — one concern per file: the base language vs. the extension. (2026-08-08)
-- AIL is a design exercise: no parser, compiler, or executor is planned; the specification itself is the language definition, so internal consistency is the quality bar. (2026-08-08)
-- The AIL extension set is deliberately minimal: order (the only new semantic rule), an explicit world model, implicit-addressee commands, `Otherwise`, `For every`, `While`, `Procedure`/calls, and `Stop!`. Full rationale in the design snapshots. (2026-08-08)
-- SPEC.md follows the v4 spec-md contract — the frontmatter `sections:` list is the contract and the body matches it exactly: enforced-only template sections (architecture, stack, ops, api) were dropped rather than declared "not applicable", and the user-stories + api content was reworked into conformance. (2026-08-08)
+- The repository's language was reframed from the ACE / AIL fork to SAE; the reframing proposal was accepted 2026-08-14 with recommended defaults: name SAE, formal break with ACE (kept as heritage), and the scenario verification exception kept. Record: `.pi/discussions/sae-reframing/`. (2026-08-14)
+- The normative core is two layout modes, not five content kinds: the kinds are a recommended, non-contractual label vocabulary. (2026-08-14)
+- Failure defaults to stop-and-report with a three-layer cascade; outcomes stay ordinary English. (2026-08-14)
+- Conditions are open-world tri-state; an undecidable condition fails the step; closed world is a profile opt-in — reversing AIL's closed-world default. (2026-08-14)
+- `For each` snapshots at loop entry; `While` is the live construct. (2026-08-14)
+- Procedures are `To`-titled blocks invoked by English-phrase binding; unmatched invocations are ordinary actions. (2026-08-14)
+- SPEC.md follows the v4 spec-md contract — the frontmatter `sections:` list is the contract and the body matches it exactly. (2026-08-08)
+- SPEC.md stays light; the language reference is the primary artifact of this directory. (2026-08-08)

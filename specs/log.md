@@ -8,6 +8,14 @@ updated: "2026-08-08"
 
 # specs/ log
 
+## 2026-08-14
+
+- Updated `index.md` — registry and reading order now reflect the SAE reframing: SPEC.md (SAE spec), LANGUAGE.md (SAE reference), ace.md (ACE heritage), ail.md (AIL migration note). Reason: registry follows the file set; the reframing added ace.md and replaced the contents of LANGUAGE.md, ail.md, SPEC.md.
+- Rewrote `SPEC.md` — subject is now SAE (Structured Agent English): context (readability goal, two-mode core, heritage), users (authors, readers, executors, profile authors), conformance (EARS criteria for the normative core), decisions (reframing + locked core decisions). Sections unchanged: [context, users, conformance, decisions]. Reason: the accepted reframing (`.pi/discussions/sae-reframing/`).
+- Replaced `ail.md` — the AIL extension reference is retired; the file is now a heritage and migration note: what AIL was, why SAE replaced it, and the construct mapping (procedures → `To`-blocks, calls → English invocation, `Stop!` → the stop-and-report default, closed world → open-world tri-state, etc.). Reason: the accepted reframing (`.pi/discussions/sae-reframing/`); the old extension reference is superseded by the SAE reference in `LANGUAGE.md`.
+- Added `ace.md` — the ACE 6.7 syntax and practical reference, preserved unchanged as a heritage document with a preamble stating the formal break. Reason: the accepted reframing keeps ACE as ancestry, not as a base; the content formerly lived in `LANGUAGE.md`, which is now the SAE reference.
+- Rewrote `LANGUAGE.md` — it is now the Structured Agent English (SAE) language reference: two layout modes (ordered steps / unordered statements), the block model, resumptive numbering, the two-axis rule, open-world tri-state conditions, `For each` snapshot / `While` live, stop-and-report failure default with cascade, `To`-title procedures with English-phrase binding, the `Expected results:` verification exception, profiles. Reason: the SAE reframing was accepted (see `.pi/discussions/sae-reframing/`); the old content (ACE 6.7 reference) moves to `ace.md` as heritage.
+
 ## 2026-08-08
 
 - Initialized `specs/` — ACE (Attempto Controlled English), status draft.
