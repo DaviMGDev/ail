@@ -1,29 +1,35 @@
-# ACE / AIL — Documentation Set
+# SAE — Documentation Set
 
-Reference documentation for **Attempto Controlled English (ACE) 6.7** and its
-fork **AIL** (Agent Instruction Language).
+Reference documentation for **Structured Agent English (SAE)**, a controlled
+subset of English for writing agent instructions that remain understandable to
+an ordinary reader even without access to the formal specification.
 
-**ACE** is a controlled natural language developed at the University of Zurich
-since 1995: a strict subset of English that is human-readable yet translates
-unambiguously into first-order logic. It serves as a knowledge representation,
-specification, and query language.
+SAE has one primary design goal:
 
-**AIL** is a fork of ACE: a strict superset that keeps ACE fully intact and
-adds sequences and procedures for describing agent behaviour. Where ACE is
-declarative (a text is an unordered set of sentences), AIL adds control —
-ordered steps, branching, loops, and named procedures over an explicit world
-model.
+> A person who reads a SAE text for the first time should be able to
+> understand what the agent is supposed to do, in what order, under what
+> conditions, and with what expected effects.
+
+SAE's normative core is deliberately small: two layout modes (ordered steps
+and unordered statements), a stop-and-report failure default, open-world
+conditions, English-phrase procedure binding, and one scenario exception.
+Content-kind labels are a recommended vocabulary, not a contract; strictness
+lives in profiles.
 
 > This is a design exercise: the specification itself is the artifact. No
 > parser, compiler, or executor is planned.
+
+**Heritage.** SAE descends from [Attempto Controlled English 6.7](specs/ace.md)
+and its former fork [AIL](specs/ail.md) — both kept in the repo as heritage
+and migration references. SAE is a formal break from them, not an extension.
 
 ## Repository layout
 
 | Path | Contents |
 |------|----------|
-| [`specs/`](specs/index.md) | MKF compound node — the authoritative content: `SPEC.md` (spec monolith), `LANGUAGE.md` (ACE 6.7 base reference), `ail.md` (AIL extension reference), `index.md` (registry), `log.md` (activity log) |
+| [`specs/`](specs/index.md) | MKF compound node — the authoritative content: `SPEC.md` (spec monolith), `LANGUAGE.md` (SAE reference), `ace.md` (ACE heritage), `ail.md` (AIL migration note), `index.md` (registry), `log.md` (activity log) |
 | [`discussions/`](discussions/) | Design discussion snapshots — read for design rationale |
-| [`skills/ail/`](skills/ail/SKILL.md) | Agent Skill for writing AIL texts: `SKILL.md` + references (grammar, constructs, worked example, assumptions) |
+| [`skills/sae/`](skills/sae/SKILL.md) | Agent Skill for writing SAE texts: `SKILL.md` + references (grammar, constructs, worked example, assumptions) |
 | `.pi/plans/` | Plan state — committed like any other doc |
 | `.pi-subagents/` | Transient agent artifacts — never committed |
 
@@ -31,17 +37,18 @@ model.
 
 1. [`specs/SPEC.md`](specs/SPEC.md) — the spec monolith: context, users,
    conformance, decisions.
-2. [`specs/LANGUAGE.md`](specs/LANGUAGE.md) — the full ACE 6.7 syntax and
-   practical reference (golden rules, noun/verb phrases, sentences, queries,
-   commands, semantics, cheat sheet).
-3. [`specs/ail.md`](specs/ail.md) — the AIL extension: superset guarantee,
-   world model, control contexts, steps, branching, loops, procedures,
-   failure semantics, compatibility annex.
+2. [`specs/LANGUAGE.md`](specs/LANGUAGE.md) — the full SAE reference: blocks
+   and modes, numbering and indentation, conditions, repetition, failure
+   behavior, procedures, scenarios, style, profiles.
+3. [`specs/ace.md`](specs/ace.md) — the ACE 6.7 heritage reference (SAE's
+   ancestor, kept for comparison).
+4. [`specs/ail.md`](specs/ail.md) — the AIL heritage and migration note, with
+   the construct-by-construct mapping onto SAE.
 
 ## Status
 
-Draft. The AIL extension is a strict superset of ACE: every valid ACE text is
-a valid AIL text; AIL clarifies semantics but never rejects ACE syntax.
+Draft. The reframing from the ACE / AIL fork to SAE was accepted on
+2026-08-14; the decision record is `.pi/discussions/sae-reframing/`.
 
 ## Contributing
 

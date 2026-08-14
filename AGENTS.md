@@ -4,38 +4,50 @@ Project conventions for this repository.
 
 ## What this repository is
 
-Documentation set for **ACE 6.7** (Attempto Controlled English) and its fork
-**AIL** (Agent Instruction Language), a strict superset of ACE adding
-sequences and procedures. No code, no tooling — the documents are the
-artifact. The authoritative content lives in `specs/`; `skills/ail/` is a
-derived artifact that applies the AIL spec to writing instruction texts.
+Documentation set for **SAE** (Structured Agent English), a readability-first
+controlled subset of English for writing agent instructions. No code, no
+tooling — the documents are the artifact. The authoritative content lives in
+`specs/`; `skills/sae/` is a derived artifact that applies the SAE spec to
+writing instruction texts.
+
+SAE's ancestry is documented as heritage: **ACE 6.7** (Attempto Controlled
+English, see `specs/ace.md`) and its former fork **AIL** (see
+`specs/ail.md`). SAE is a **formal break** from both, not an extension: it
+drops ACE's punctuation-as-semantics, determiner grammar, and hyphenation.
+The reframing decision record is `.pi/discussions/sae-reframing/`.
 
 ## Repository layout
 
 - `specs/` — MKF compound node: `SPEC.md` (the spec monolith, the only
-  contract), citizen files (`LANGUAGE.md` = ACE base reference, `ail.md` =
-  AIL extension reference), `index.md` (registry), `log.md` (activity log).
+  contract), citizen files (`LANGUAGE.md` = SAE language reference,
+  `ace.md` = ACE heritage reference, `ail.md` = AIL migration note),
+  `index.md` (registry), `log.md` (activity log).
 - `discussions/` — design discussion snapshots; read them for design
-  rationale (esp. before changing AIL content).
-- `skills/ail/` — Agent Skill for writing AIL texts: `SKILL.md` plus
+  rationale (esp. before changing SAE content).
+- `skills/sae/` — Agent Skill for writing SAE texts: `SKILL.md` plus
   references (grammar, constructs, worked example, assumptions), written in
-  valid AIL. AIL content never names the language ("AIL", "ACE") — the
-  frontmatter carries the `tags: [ail]` marker instead.
+  valid SAE. SAE content never names the language ("SAE", "ACE", "AIL") —
+  the frontmatter carries the `tags: [sae]` marker instead.
 - `.pi/plans/` — plan state; commit it like any other project doc.
 - `.pi-subagents/` — transient agent run artifacts; **never commit**
   (ignored via `.gitignore`).
 
 ## Spec editing rules
 
-- `SPEC.md` has a `## Must contain` checklist — the only hard contract.
-  Replace content and `[placeholders]`; never restructure the checklist.
+- `SPEC.md` declares its own contract in frontmatter: the `sections:` list
+  is the set of `##` headings the document must contain, and the body must
+  match it exactly (bijection). `context` and `decisions` are the floor;
+  they are never removed. Edit the list and the body together.
 - Every file in `specs/` carries MKF frontmatter
   (`type`, `title`, `description`, `created`, `updated` — ISO 8601 dates).
 - Every change to `specs/` is logged in `log.md` (date + change + reason).
 - `index.md` lists every file in `specs/`; internal relative links must
   resolve.
-- AIL is a strict superset of ACE: the AIL docs may clarify semantics but
-  must never reject syntax that ACE accepts.
+- SAE is a formal break from ACE: SAE may not reintroduce ACE's formal
+  machinery, and ACE content stays in `ace.md` as heritage. New SAE
+  constructs must respect the accepted proposal's locked core (two layout
+  modes, stop-and-report default, open-world conditions, English-phrase
+  procedure binding); strictness belongs in profiles.
 
 ## Git workflow
 
