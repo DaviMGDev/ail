@@ -2,9 +2,9 @@
 type: reference
 title: "Assumptions for Writing Agent Instruction Texts"
 description: "Documented assumptions and judgment calls where the definition of the language is silent"
-tags: [ail]
+tags: [sae]
 created: "2026-08-08"
-updated: "2026-08-08"
+updated: "2026-08-14"
 ---
 
 # Assumptions
@@ -19,7 +19,7 @@ A code fence contains a separate text.
 
 ## Markers
 
-A reference file declares the tag "ail" in its frontmatter.
+A reference file declares the tag "sae" in its frontmatter.
 The skill specification does not allow the tags field in a skill file.
 The marker of a skill file lives in the metadata field.
 A date in the frontmatter has the form "YYYY-MM-DD".
@@ -28,17 +28,16 @@ A date in the frontmatter has the form "YYYY-MM-DD".
 
 A rule about all texts uses the determiner "every".
 A rule in a reference file is a universal statement.
-An invalid sentence appears in quotes.
-A sentence with the word "invalid" is a counterexample.
-A file reference in a command is a relative path.
-A hyphenated compound is a new content word.
-An example in a reference file is illustrative.
+A knowledge line sits between the steps of a flow without breaking the flow.
+An example of a step is a numbered line of a code fence.
+A sentence inside a code fence is not a step of the reference file itself.
 
-## Readings
+## Judgment calls
 
-A conditional step without an Otherwise-clause is valid.
-A loop is not an arm of an if-otherwise construct.
-No text names its language.
-A generic term like "a text" or "the language" is not a self-reference.
-A bare plural is valid after the word "of" or the word "but".
-A noun phrase of the form "the X of a Y" has an accessible antecedent in its complement.
+The language defines no effects.
+The executor of a command determines the effects of the command.
+The agent reports to the channel that issued the instruction.
+A bare "retries" means a retry with no stated count.
+After a bare retry fails, the default applies.
+The agent stops and reports the failure.
+A report states the failed step and the observed condition.
