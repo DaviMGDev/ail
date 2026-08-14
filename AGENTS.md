@@ -14,7 +14,6 @@ SAE's ancestry is documented as heritage: **ACE 6.7** (Attempto Controlled
 English, see `specs/ace.md`) and its former fork **AIL** (see
 `specs/ail.md`). SAE is a **formal break** from both, not an extension: it
 drops ACE's punctuation-as-semantics, determiner grammar, and hyphenation.
-The reframing decision record is `.pi/discussions/sae-reframing/`.
 
 ## Repository layout
 
@@ -22,15 +21,12 @@ The reframing decision record is `.pi/discussions/sae-reframing/`.
   contract), citizen files (`LANGUAGE.md` = SAE language reference,
   `ace.md` = ACE heritage reference, `ail.md` = AIL migration note),
   `index.md` (registry), `log.md` (activity log).
-- `discussions/` — design discussion snapshots; read them for design
-  rationale (esp. before changing SAE content).
 - `skills/sae/` — Agent Skill for writing SAE texts: `SKILL.md` plus
   references (grammar, constructs, worked example, assumptions), written in
   valid SAE. SAE content never names the language ("SAE", "ACE", "AIL") —
   the frontmatter carries the `tags: [sae]` marker instead.
-- `.pi/plans/` — plan state; commit it like any other project doc.
-- `.pi-subagents/` — transient agent run artifacts; **never commit**
-  (ignored via `.gitignore`).
+- `.pi*` — local agent state (plans, discussion records, subagent
+  artifacts); **never commit** (ignored via `.gitignore`).
 
 ## Spec editing rules
 
@@ -54,7 +50,7 @@ The reframing decision record is `.pi/discussions/sae-reframing/`.
 - Work directly on `main` (local, single-user project).
 - Commit **atomically**: one logical change per commit; stage explicitly
   (`git add <paths>`), then review with `git status` / `git diff --cached`.
-- **Never** stage `.pi-subagents/` or anything ignored.
+- **Never** stage ignored files (`.pi*`).
 - Commit message format — Conventional Commits:
 
   ```
@@ -65,8 +61,7 @@ The reframing decision record is `.pi/discussions/sae-reframing/`.
     `feat`/`fix` (reserved for future code, none today).
   - `scope`: `specs`, `skills`, `project`, or a file name when it fits.
   - `summary`: imperative mood, lowercase, ≤ 72 chars, no trailing period.
-  - Add a body (what + why) when the summary alone is not enough; reference
-    `discussions/` snapshots for design rationale.
+  - Add a body (what + why) when the summary alone is not enough.
 
   Examples:
   - `chore(project): initialize repository with AGENTS.md and specs`

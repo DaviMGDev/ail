@@ -9,8 +9,8 @@ updated: "2026-08-14"
 # ACE 6.7 — Heritage Reference
 
 > **Heritage note.** This document was the base language reference when this
-> repository documented the ACE / AIL fork. Since the 2026-08-14 reframing
-> (see `.pi/discussions/sae-reframing/`), the primary language of this
+> repository documented the ACE / AIL fork. Since the 2026-08-14
+> reframing, the primary language of this
 > repository is **Structured Agent English (SAE)** — see [LANGUAGE.md](LANGUAGE.md).
 > SAE is a **formal break** from ACE, not an extension: it deliberately drops
 > ACE's punctuation-as-semantics, determiner grammar, hyphenation, and

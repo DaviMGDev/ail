@@ -28,10 +28,7 @@ and migration references. SAE is a formal break from them, not an extension.
 | Path | Contents |
 |------|----------|
 | [`specs/`](specs/index.md) | MKF compound node — the authoritative content: `SPEC.md` (spec monolith), `LANGUAGE.md` (SAE reference), `ace.md` (ACE heritage), `ail.md` (AIL migration note), `index.md` (registry), `log.md` (activity log) |
-| [`discussions/`](discussions/) | Design discussion snapshots — read for design rationale |
 | [`skills/sae/`](skills/sae/SKILL.md) | Agent Skill for writing SAE texts: `SKILL.md` + references (grammar, constructs, worked example, assumptions) |
-| `.pi/plans/` | Plan state — committed like any other doc |
-| `.pi-subagents/` | Transient agent artifacts — never committed |
 
 ## Reading order
 
@@ -48,7 +45,7 @@ and migration references. SAE is a formal break from them, not an extension.
 ## Status
 
 Draft. The reframing from the ACE / AIL fork to SAE was accepted on
-2026-08-14; the decision record is `.pi/discussions/sae-reframing/`.
+2026-08-14.
 
 ## Contributing
 

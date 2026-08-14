@@ -8,7 +8,7 @@ updated: "2026-08-14"
 
 # AIL — Heritage and Migration Note
 
-> **Retired.** AIL (Agent Instruction Language) was a fork of ACE 6.7 — a strict superset adding sequences and procedures over an explicit world model. On 2026-08-14 the repository reframed its language as **Structured Agent English (SAE)** (see [LANGUAGE.md](LANGUAGE.md)); the decision record is `.pi/discussions/sae-reframing/` (proposal v1, accepted). This file preserves what AIL was and maps every AIL construct onto SAE. The former full extension reference is superseded; its design rationale lives in `discussions/specs-directory/snapshots/`.
+> **Retired.** AIL (Agent Instruction Language) was a fork of ACE 6.7 — a strict superset adding sequences and procedures over an explicit world model. On 2026-08-14 the repository reframed its language as **Structured Agent English (SAE)** (see [LANGUAGE.md](LANGUAGE.md)); the reframing proposal was accepted. This file preserves what AIL was and maps every AIL construct onto SAE. The former full extension reference is superseded.
 
 ## What AIL was
 

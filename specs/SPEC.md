@@ -18,7 +18,7 @@ SAE is therefore optimized for readable, disciplined English, not for the smalle
 
 SAE is a design exercise: no parser, compiler, or executor is planned — the specification itself is the language definition, so internal consistency is the quality bar.
 
-**Heritage.** SAE descends from Attempto Controlled English 6.7 ([ace.md](ace.md), kept as a heritage reference) and its former fork AIL ([ail.md](ail.md), kept as a migration note). SAE is a **formal break** from both: it abandons ACE's formal machinery (punctuation-as-semantics, determiner grammar, hyphenation, anaphora rules) and retires the ACE superset guarantee. The reframing decision record is `.pi/discussions/sae-reframing/` (proposal v1, accepted 2026-08-14).
+**Heritage.** SAE descends from Attempto Controlled English 6.7 ([ace.md](ace.md), kept as a heritage reference) and its former fork AIL ([ail.md](ail.md), kept as a migration note). SAE is a **formal break** from both: it abandons ACE's formal machinery (punctuation-as-semantics, determiner grammar, hyphenation, anaphora rules) and retires the ACE superset guarantee. The reframing proposal was accepted 2026-08-14.
 
 ## Users
 
@@ -43,7 +43,7 @@ Conformance of a SAE text is judged against [LANGUAGE.md](LANGUAGE.md); there is
 
 ## Decisions
 
-- The repository's language was reframed from the ACE / AIL fork to SAE; the reframing proposal was accepted 2026-08-14 with recommended defaults: name SAE, formal break with ACE (kept as heritage), and the scenario verification exception kept. Record: `.pi/discussions/sae-reframing/`. (2026-08-14)
+- The repository's language was reframed from the ACE / AIL fork to SAE; the reframing proposal was accepted 2026-08-14 with recommended defaults: name SAE, formal break with ACE (kept as heritage), and the scenario verification exception kept. (2026-08-14)
 - The normative core is two layout modes, not five content kinds: the kinds are a recommended, non-contractual label vocabulary. (2026-08-14)
 - Failure defaults to stop-and-report with a three-layer cascade; outcomes stay ordinary English. (2026-08-14)
 - Conditions are open-world tri-state; an undecidable condition fails the step; closed world is a profile opt-in — reversing AIL's closed-world default. (2026-08-14)
